@@ -7,7 +7,7 @@ using MediatR;
 namespace Application.Modules.Products.Commands
 {
     /// <summary>
-    /// Comando para Crear un producto, la caracteristica de este comando es que la logica esta definido
+    /// Comando para Crear una orden de productos, la caracteristica de este comando es que la logica esta definido
     /// en terminos de abstracciones, de manera que asegura la portabilidad y la mantenibilidad
     /// </summary>
     public static class CreateOrderCommand

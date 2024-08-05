@@ -1,11 +1,11 @@
-﻿using Application.Modules.Products.Repositories;
+﻿using Application.Modules.Orders.Repositories;
 using FluentValidation;
 using MediatR;
 
 namespace Application.Modules.Products.Commands
 {
     /// <summary>
-    /// Comando para Crear un producto, la caracteristica de este comando es que la logica esta definido
+    /// Comando para eliminar una orden, la caracteristica de este comando es que la logica esta definido
     /// en terminos de abstracciones, de manera que asegura la portabilidad y la mantenibilidad
     /// </summary>
     public static class DeleteOrderCommand
@@ -45,16 +45,16 @@ namespace Application.Modules.Products.Commands
             /// <summary>
             ///
             /// </summary>
-            private readonly IProductRepository _product;
+            private readonly IOrderRepository _order;
 
             /// <summary>
             /// Constructor
             /// </summary>
             /// <param name="validator"></param>
-            public Handler(IValidator<Request> validator, IProductRepository product)
+            public Handler(IValidator<Request> validator, IOrderRepository product)
             {
                 _validator = validator;
-                _product = product;
+                _order = product;
             }
 
             /// <summary>
@@ -70,7 +70,7 @@ namespace Application.Modules.Products.Commands
 
                 if (validationResult.IsValid)
                 {
-                    var response = await _product.Delete(request.OrderId);
+                    var response = await _order.Delete(request.OrderId);
                     return new Response(response);
                 }
                 else return new Response(false);
