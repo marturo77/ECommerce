@@ -1,6 +1,6 @@
-﻿using Application.Modules.Products.Events;
-using Application.Modules.Products.Models;
-using Application.Modules.Products.Repositories;
+﻿using Application.Modules.Orders.Events;
+using Application.Modules.Orders.Models;
+using Application.Modules.Orders.Repositories;
 using FluentValidation;
 using MediatR;
 
@@ -18,21 +18,20 @@ namespace Application.Modules.Products.Commands
         /// <param name="FirstName"></param>
         /// <param name="LastName"></param>
         /// <param name="Email"></param>
-        public record Request(int ProductId, string Name, string Category, string Description, int Stock, decimal Price) : IRequest<Response>
+        public record Request(DateTime OrderDate, string Customer, string Status, ICollection<OrderItemInfo> OrderItems, decimal Total) : IRequest<Response>
         {
             /// <summary>
             ///  Conversion usando el compilador de entidades, convierte un request a un objeto de negocio
             /// </summary>
             /// <param name="request"></param>
-            public static implicit operator ProductInfo(Request request) =>
+            public static implicit operator OrderInfo(Request request) =>
                 new()
                 {
-                    Name = request.Name,
-                    Category = request.Category,
-                    Description = request.Description,
-                    Price = request.Price,
-                    ProductId = request.ProductId,
-                    Stock = request.Stock
+                    OrderDate = request.OrderDate,
+                    Customer = request.Customer,
+                    OrderItems = request.OrderItems,
+                    Status = request.Status,
+                    Total = request.Total
                 };
         }
 
@@ -44,12 +43,9 @@ namespace Application.Modules.Products.Commands
             public RequestValidator()
             {
                 RuleFor(x => x).NotNull();
-                RuleFor(x => x.Name)
+                RuleFor(x => x.Customer)
                     .NotEmpty()
                     .MaximumLength(256);
-
-                RuleFor(x => x.Description).NotEmpty();
-                RuleFor(x => x.Price).NotNull();
             }
         }
 
@@ -71,16 +67,16 @@ namespace Application.Modules.Products.Commands
             /// <summary>
             ///
             /// </summary>
-            private readonly IProductRepository _product;
+            private readonly IOrderRepository _order;
 
             /// <summary>
             /// Constructor
             /// </summary>
             /// <param name="validator"></param>
-            public Handler(IValidator<Request> validator, IProductRepository product, IPublisher publisher)
+            public Handler(IValidator<Request> validator, IOrderRepository order, IPublisher publisher)
             {
                 _validator = validator;
-                _product = product;
+                _order = order;
                 _publisher = publisher;
             }
 
@@ -97,13 +93,13 @@ namespace Application.Modules.Products.Commands
 
                 if (validationResult.IsValid)
                 {
-                    var response = await _product.Set(request);
+                    var response = await _order.Set(request);
 
                     if (response is not null)
                     {
                         // Notifica que la orden fue creada correctamente usando emisor de eventos de MediatR
-                        await _publisher.Publish(new ProductCreatedEventArgs(response.ProductId));
-                        return new Response(response.ProductId);
+                        await _publisher.Publish(new OrderCreatedEventArgs(response.OrderId));
+                        return new Response(response.OrderId);
                     }
                     else return new Response(0);
                 }

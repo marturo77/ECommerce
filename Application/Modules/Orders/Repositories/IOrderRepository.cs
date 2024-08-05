@@ -5,7 +5,7 @@ namespace Application.Modules.Orders.Repositories
     /// <summary>
     ///
     /// </summary>
-    internal interface IOrderRepository
+    public interface IOrderRepository
     {
         /// <summary>
         /// Crea y actualiza un producto
