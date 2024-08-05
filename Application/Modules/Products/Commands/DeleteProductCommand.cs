@@ -14,14 +14,14 @@ namespace Application.Modules.Products.Commands
         ///
         /// </summary>
         /// <param name="ProductId"></param>
-        public record Request(int ProductId) : IRequest<Response>
+        public record RequestDelete(int ProductId) : IRequest<Response>
         {
         }
 
         /// <summary>
         /// Reglas de validacion en fluent validator, escritas explicitamente
         /// </summary>
-        public class RequestValidator : AbstractValidator<Request>
+        public class RequestValidator : AbstractValidator<RequestDelete>
         {
             /// <summary>
             ///
@@ -35,12 +35,12 @@ namespace Application.Modules.Products.Commands
         /// <summary>
         ///
         /// </summary>
-        public class Handler : IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<RequestDelete, Response>
         {
             /// <summary>
             ///
             /// </summary>
-            private readonly IValidator<Request> _validator;
+            private readonly IValidator<RequestDelete> _validator;
 
             /// <summary>
             ///
@@ -51,7 +51,7 @@ namespace Application.Modules.Products.Commands
             /// Constructor
             /// </summary>
             /// <param name="validator"></param>
-            public Handler(IValidator<Request> validator, IProductRepository product)
+            public Handler(IValidator<RequestDelete> validator, IProductRepository product)
             {
                 _validator = validator;
                 _product = product;
@@ -64,7 +64,7 @@ namespace Application.Modules.Products.Commands
             /// <param name="cancellationToken"></param>
             /// <returns></returns>
             /// <exception cref="NotImplementedException"></exception>
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Response> Handle(RequestDelete request, CancellationToken cancellationToken)
             {
                 var validationResult = _validator.Validate(request);
 

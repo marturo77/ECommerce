@@ -15,19 +15,19 @@ namespace Application.Modules.Products.Commands
         ///
         /// </summary>
         /// <param name="name"></param>
-        public record Request(string Name) : IRequest<Response>
+        public record RequestListOrder(string Name) : IRequest<Response>
         {
         }
 
         /// <summary>
         ///
         /// </summary>
-        public class Handler : IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<RequestListOrder, Response>
         {
             /// <summary>
             ///
             /// </summary>
-            private readonly IValidator<Request> _validator;
+            private readonly IValidator<RequestListOrder> _validator;
 
             /// <summary>
             ///
@@ -38,7 +38,7 @@ namespace Application.Modules.Products.Commands
             /// Constructor
             /// </summary>
             /// <param name="validator"></param>
-            public Handler(IValidator<Request> validator, IOrderQuery order)
+            public Handler(IValidator<RequestListOrder> validator, IOrderQuery order)
             {
                 _validator = validator;
                 _order = order;
@@ -51,7 +51,7 @@ namespace Application.Modules.Products.Commands
             /// <param name="cancellationToken"></param>
             /// <returns></returns>
             /// <exception cref="NotImplementedException"></exception>
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Response> Handle(RequestListOrder request, CancellationToken cancellationToken)
             {
                 var validationResult = _validator.Validate(request);
 

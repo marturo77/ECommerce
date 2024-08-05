@@ -18,13 +18,13 @@ namespace Application.Modules.Products.Commands
         /// <param name="FirstName"></param>
         /// <param name="LastName"></param>
         /// <param name="Email"></param>
-        public record Request(int ProductId, string Name, string Category, string Description, int Stock, decimal Price) : IRequest<Response>
+        public record RequestCreate(int ProductId, string Name, string Category, string Description, int Stock, decimal Price) : IRequest<Response>
         {
             /// <summary>
             ///  Conversion usando el compilador de entidades, convierte un request a un objeto de negocio
             /// </summary>
             /// <param name="request"></param>
-            public static implicit operator ProductInfo(Request request) =>
+            public static implicit operator ProductInfo(RequestCreate request) =>
                 new()
                 {
                     Name = request.Name,
@@ -39,7 +39,7 @@ namespace Application.Modules.Products.Commands
         /// <summary>
         /// Reglas de validacion en fluent validator, escritas explicitamente
         /// </summary>
-        public class RequestValidator : AbstractValidator<Request>
+        public class RequestValidator : AbstractValidator<RequestCreate>
         {
             public RequestValidator()
             {
@@ -56,12 +56,12 @@ namespace Application.Modules.Products.Commands
         /// <summary>
         ///
         /// </summary>
-        public class Handler : IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<RequestCreate, Response>
         {
             /// <summary>
             ///
             /// </summary>
-            private readonly IValidator<Request> _validator;
+            private readonly IValidator<RequestCreate> _validator;
 
             /// <summary>
             ///
@@ -77,7 +77,7 @@ namespace Application.Modules.Products.Commands
             /// Constructor
             /// </summary>
             /// <param name="validator"></param>
-            public Handler(IValidator<Request> validator, IProductRepository product, IPublisher publisher)
+            public Handler(IValidator<RequestCreate> validator, IProductRepository product, IPublisher publisher)
             {
                 _validator = validator;
                 _product = product;
@@ -91,7 +91,7 @@ namespace Application.Modules.Products.Commands
             /// <param name="cancellationToken"></param>
             /// <returns></returns>
             /// <exception cref="NotImplementedException"></exception>
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Response> Handle(RequestCreate request, CancellationToken cancellationToken)
             {
                 var validationResult = _validator.Validate(request);
 

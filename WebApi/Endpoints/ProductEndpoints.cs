@@ -24,7 +24,7 @@ public static class ProductEndpoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> CreateProduct(CreateProductCommand.Request request, ISender sender,
+    private static async Task<IResult> CreateProduct(CreateProductCommand.RequestCreate request, ISender sender,
         CancellationToken cancellationToken)
     {
         var response = await sender.Send(request);
@@ -38,7 +38,7 @@ public static class ProductEndpoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> DeleteProduct(DeleteProductCommand.Request request, ISender sender,
+    private static async Task<IResult> DeleteProduct(DeleteProductCommand.RequestDelete request, ISender sender,
        CancellationToken cancellationToken)
     {
         var response = await sender.Send(request);
@@ -52,7 +52,7 @@ public static class ProductEndpoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> ListProduct(ListProductCommand.Request request, ISender sender,
+    private static async Task<IResult> ListProduct(ListProductCommand.RequestList request, ISender sender,
        CancellationToken cancellationToken)
     {
         var response = await sender.Send(request);

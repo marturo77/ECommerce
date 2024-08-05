@@ -18,13 +18,13 @@ namespace Application.Modules.Products.Commands
         /// <param name="FirstName"></param>
         /// <param name="LastName"></param>
         /// <param name="Email"></param>
-        public record Request(DateTime OrderDate, string Customer, string Status, ICollection<OrderItemInfo> OrderItems, decimal Total) : IRequest<Response>
+        public record RequestCreateOrder(DateTime OrderDate, string Customer, string Status, ICollection<OrderItemInfo> OrderItems, decimal Total) : IRequest<Response>
         {
             /// <summary>
             ///  Conversion usando el compilador de entidades, convierte un request a un objeto de negocio
             /// </summary>
             /// <param name="request"></param>
-            public static implicit operator OrderInfo(Request request) =>
+            public static implicit operator OrderInfo(RequestCreateOrder request) =>
                 new()
                 {
                     OrderDate = request.OrderDate,
@@ -38,7 +38,7 @@ namespace Application.Modules.Products.Commands
         /// <summary>
         /// Reglas de validacion en fluent validator, escritas explicitamente
         /// </summary>
-        public class RequestValidator : AbstractValidator<Request>
+        public class RequestValidator : AbstractValidator<RequestCreateOrder>
         {
             public RequestValidator()
             {
@@ -52,12 +52,12 @@ namespace Application.Modules.Products.Commands
         /// <summary>
         ///
         /// </summary>
-        public class Handler : IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<RequestCreateOrder, Response>
         {
             /// <summary>
             ///
             /// </summary>
-            private readonly IValidator<Request> _validator;
+            private readonly IValidator<RequestCreateOrder> _validator;
 
             /// <summary>
             ///
@@ -73,7 +73,7 @@ namespace Application.Modules.Products.Commands
             /// Constructor
             /// </summary>
             /// <param name="validator"></param>
-            public Handler(IValidator<Request> validator, IOrderRepository order, IPublisher publisher)
+            public Handler(IValidator<RequestCreateOrder> validator, IOrderRepository order, IPublisher publisher)
             {
                 _validator = validator;
                 _order = order;
@@ -87,7 +87,7 @@ namespace Application.Modules.Products.Commands
             /// <param name="cancellationToken"></param>
             /// <returns></returns>
             /// <exception cref="NotImplementedException"></exception>
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Response> Handle(RequestCreateOrder request, CancellationToken cancellationToken)
             {
                 var validationResult = _validator.Validate(request);
 

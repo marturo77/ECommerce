@@ -4,8 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .RegisterCors()
-    .RegisterMediator()
     .RegisterValidators()
+    .RegisterMediator()
     .RegisterDatabase(builder.Configuration)
     .RegisterSwagger();
 
