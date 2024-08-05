@@ -1,5 +1,5 @@
-﻿using Application.Modules.Orders.Queries;
-using Application.Modules.Products.Models;
+﻿using Application.Modules.Orders.Models;
+using Application.Modules.Orders.Queries;
 using FluentValidation;
 using MediatR;
 

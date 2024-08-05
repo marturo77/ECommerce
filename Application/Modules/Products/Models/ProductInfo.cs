@@ -1,4 +1,6 @@
-﻿namespace Application.Modules.Products.Models
+﻿using Application.Modules.Orders.Models;
+
+namespace Application.Modules.Products.Models
 {
     /// <summary>
     ///

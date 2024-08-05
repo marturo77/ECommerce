@@ -1,4 +1,4 @@
-﻿using Application.Modules.Products.Models;
+﻿using Application.Modules.Orders.Models;
 
 namespace Application.Modules.Orders.Queries
 {
