@@ -21,7 +21,7 @@ export class ProductsComponent implements OnInit {
     category: '',
     stock: 0
   };
-  errorMessage: string = '';
+  errorMessages: string[] = [];
 
   constructor(private productsService: ProductsService) { }
 
@@ -36,10 +36,21 @@ export class ProductsComponent implements OnInit {
       product => {
         this.products.push(product);
         this.resetForm();
-        this.errorMessage = ''; // Clear any previous error message
+        this.errorMessages = []; // Clear any previous error messages
       },
       error => {
-        this.errorMessage = error;
+        this.errorMessages = error.split('\n');
+      }
+    );
+  }
+
+  deleteProduct(id: number): void {
+    this.productsService.deleteProduct(id).subscribe(
+      () => {
+        this.products = this.products.filter(product => product.productId !== id);
+      },
+      error => {
+        this.errorMessages = error.split('\n');
       }
     );
   }

@@ -33,12 +33,6 @@ export class ProductsService {
     );
   }
 
-  updateProduct(id: number, product: Product): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, product).pipe(
-      catchError(this.handleError)
-    );
-  }
-
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
@@ -53,7 +47,13 @@ export class ProductsService {
     } else {
       // Server-side error
       if (error.error.errors) {
-        errorMessage = `Error: ${error.error.title}\nDetails: ${JSON.stringify(error.error.errors)}`;
+        const validationErrors = [];
+        for (const key in error.error.errors) {
+          if (error.error.errors.hasOwnProperty(key)) {
+            validationErrors.push(`${key}: ${error.error.errors[key].join(', ')}`);
+          }
+        }
+        errorMessage = validationErrors.join('\n');
       } else {
         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
       }

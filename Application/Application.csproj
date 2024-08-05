@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Modules\Orders\Commands\" />
+    <Folder Include="Modules\Orders\Events\" />
+    <Folder Include="Modules\Orders\Models\" />
+    <Folder Include="Modules\Orders\Queries\" />
+    <Folder Include="Modules\Orders\Repositories\" />
+    <Folder Include="Modules\Products\Events\" />
+    <Folder Include="Modules\Products\Queries\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.9.2" />
+    <PackageReference Include="MediatR" Version="12.4.0" />
+  </ItemGroup>
+
+</Project>

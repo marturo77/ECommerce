@@ -1,6 +1,5 @@
 <div class="container mt-5">
   <h2 class="mb-4">Product List</h2>
-  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
   <div class="row">
     <div class="col-md-4 mb-4" *ngFor="let product of products">
       <div class="card h-100">
@@ -10,8 +9,9 @@
           <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
           <p class="card-text"><strong>Stock:</strong> {{ product.stock }} in stock</p>
         </div>
-        <div class="card-footer">
+        <div class="card-footer d-flex justify-content-between">
           <button class="btn btn-primary">Add to Cart</button>
+          <button class="btn btn-danger" (click)="deleteProduct(product.productId)">Delete</button>
         </div>
       </div>
     </div>
@@ -42,5 +42,10 @@
       </div>
       <button type="submit" class="btn btn-success">Create Product</button>
     </form>
+    <div *ngIf="errorMessages.length" class="alert alert-danger mt-3">
+      <ul>
+        <li *ngFor="let errorMessage of errorMessages">{{ errorMessage }}</li>
+      </ul>
+    </div>
   </div>
 </div>

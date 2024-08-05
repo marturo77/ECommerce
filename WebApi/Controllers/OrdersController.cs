@@ -24,7 +24,8 @@ public class OrdersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Order>> GetOrder(int id)
     {
-        var order = await _context.Orders.Include(o => o.OrderItems).FirstOrDefaultAsync(o => o.OrderId == id);
+        var order = await _context.Orders.Include(o => o.OrderItems)
+                                         .FirstOrDefaultAsync(o => o.OrderId == id);
 
         if (order == null)
         {
@@ -38,6 +39,11 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Order>> PostOrder(Order order)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
 
@@ -51,6 +57,11 @@ public class OrdersController : ControllerBase
         if (id != order.OrderId)
         {
             return BadRequest();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
         }
 
         _context.Entry(order).State = EntityState.Modified;

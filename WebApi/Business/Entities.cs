@@ -1,4 +1,6 @@
-﻿namespace Business
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Business
 {
     // Models/Customer.cs
     public class Customer
@@ -39,21 +41,39 @@
     }
 
     // Models/Product.cs
+
     public class Product
     {
-        public int ProductId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public decimal Price { get; set; }
-        public string Category { get; set; }
-        public int Stock { get; set; }
-
-        public List<OrderItem> OrderItems { get; set; }
-
-        //
+        /// <summary>
+        ///
+        /// </summary>
         public Product()
         {
             OrderItems = new List<OrderItem>();
         }
+
+        public int ProductId { get; set; }
+
+        [Required(ErrorMessage = "The name field is required.")]
+        [StringLength(100, ErrorMessage = "The name must be between 3 and 100 characters.", MinimumLength = 3)]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "The description field is required.")]
+        [StringLength(500, ErrorMessage = "The description must be between 5 and 500 characters.", MinimumLength = 5)]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "The price field is required.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "The price must be greater than zero.")]
+        public decimal Price { get; set; }
+
+        [Required(ErrorMessage = "The category field is required.")]
+        [StringLength(50, ErrorMessage = "The category must be between 3 and 50 characters.", MinimumLength = 3)]
+        public string Category { get; set; }
+
+        [Required(ErrorMessage = "The stock field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The stock must be a non-negative number.")]
+        public int Stock { get; set; }
+
+        public List<OrderItem> OrderItems { get; set; }
     }
 }
