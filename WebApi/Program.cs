@@ -1,6 +1,6 @@
 using Business;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Todo.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,24 +24,11 @@ builder.Services.AddDbContext<ECommerceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnString")));
 
 // Configurar Swagger para la documentación de la API
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "ECommerce API",
-        Version = "v1",
-        Description = "An API to manage e-commerce platform",
-        Contact = new OpenApiContact
-        {
-            Name = "Your Name",
-            Email = "your.email@example.com",
-            Url = new Uri("https://example.com"),
-        }
-    });
-});
+builder.Services.RegisterSwagger();
 
 var app = builder.Build();
+
+builder.Services.RegisterValidators();
 
 // Configurar el middleware
 if (app.Environment.IsDevelopment())
@@ -66,5 +53,8 @@ app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.RegisterProductsEndpoints();
+app.RegisterOrderEndpoints();
 
 app.Run();
