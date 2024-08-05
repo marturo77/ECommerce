@@ -2,6 +2,7 @@ using Todo.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services
     .RegisterCors()
     .RegisterValidators()
@@ -23,5 +24,6 @@ app.UseCors("AllowAllOrigins");
 
 app.RegisterProductsEndpoints();
 app.RegisterOrderEndpoints();
+app.UseRouting();
 
 app.Run();

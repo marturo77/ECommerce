@@ -1,5 +1,6 @@
 using Application.Modules.Products.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Todo.Api.Endpoints;
 
@@ -24,7 +25,7 @@ public static class OrderEndPoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> CreateOrder(CreateProductCommand.RequestCreate request, ISender sender,
+    private static async Task<IResult> CreateOrder([FromBody] CreateProductCommand.RequestCreate request, ISender sender,
         CancellationToken cancellationToken)
     {
         var response = await sender.Send(request);
@@ -38,9 +39,10 @@ public static class OrderEndPoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> DeleteOrder(DeleteProductCommand.RequestDelete request, ISender sender,
+    private static async Task<IResult> DeleteOrder([FromQuery] int id, ISender sender,
        CancellationToken cancellationToken)
     {
+        DeleteProductCommand.RequestDelete request = new DeleteProductCommand.RequestDelete(id);
         var response = await sender.Send(request);
         return Results.Ok(response);
     }
@@ -52,9 +54,10 @@ public static class OrderEndPoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> ListOrder(ListProductCommand.RequestList request, ISender sender,
+    private static async Task<IResult> ListOrder([FromQuery] string name, ISender sender,
        CancellationToken cancellationToken)
     {
+        ListProductCommand.RequestList request = new ListProductCommand.RequestList(name);
         var response = await sender.Send(request);
         return Results.Ok(response);
     }

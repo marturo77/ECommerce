@@ -27,20 +27,14 @@ namespace Application.Modules.Products.Commands
             /// <summary>
             ///
             /// </summary>
-            private readonly IValidator<RequestListOrder> _validator;
-
-            /// <summary>
-            ///
-            /// </summary>
             private readonly IOrderQuery _order;
 
             /// <summary>
             /// Constructor
             /// </summary>
             /// <param name="validator"></param>
-            public Handler(IValidator<RequestListOrder> validator, IOrderQuery order)
+            public Handler(IOrderQuery order)
             {
-                _validator = validator;
                 _order = order;
             }
 
@@ -53,15 +47,9 @@ namespace Application.Modules.Products.Commands
             /// <exception cref="NotImplementedException"></exception>
             public async Task<Response> Handle(RequestListOrder request, CancellationToken cancellationToken)
             {
-                var validationResult = _validator.Validate(request);
-
-                if (validationResult.IsValid)
-                {
-                    // Se usa notacion Async porque la mayoria de linters lo revisan y validan de esta forma
-                    var response = await _order.ListAsync(request.Name);
-                    return new Response(response);
-                }
-                else return new Response(null);
+                // Se usa notacion Async porque la mayoria de linters lo revisan y validan de esta forma
+                var response = await _order.ListAsync(request.Name);
+                return new Response(response);
             }
         }
 

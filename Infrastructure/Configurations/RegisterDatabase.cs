@@ -1,4 +1,6 @@
-﻿using Application.Modules.Orders.Repositories;
+﻿using Application.Modules.Orders.Queries;
+using Application.Modules.Orders.Repositories;
+using Application.Modules.Products.Queries;
 using Application.Modules.Products.Repositories;
 using Business;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,10 @@ public static class DatabaseRegister
 
         // Registro del repositior para ordenes
         _ = services.AddScoped<IOrderRepository, OrderRepository>();
+
+        _ = services.AddScoped<IProductQuery, ProductQueryRepository>();
+
+        _ = services.AddScoped<IOrderQuery, OrderQueryRepository>();
 
         return services;
     }
