@@ -1,4 +1,5 @@
-﻿using Application.Modules.Products.Repositories;
+﻿using Application.Modules.Orders.Repositories;
+using Application.Modules.Products.Repositories;
 using Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,11 @@ public static class DatabaseRegister
             options.UseSqlServer(configuration.GetConnectionString("ConnString"));
         });
 
+        // Registro del repositorio para productos
         _ = services.AddScoped<IProductRepository, ProductRepository>();
+
+        // Registro del repositior para ordenes
+        _ = services.AddScoped<IOrderRepository, OrderRepository>();
 
         return services;
     }
