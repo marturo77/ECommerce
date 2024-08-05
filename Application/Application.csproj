@@ -9,13 +9,7 @@
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Modules\Orders\Commands\" />
-    <Folder Include="Modules\Orders\Events\" />
     <Folder Include="Modules\Orders\Models\" />
-    <Folder Include="Modules\Orders\Queries\" />
-    <Folder Include="Modules\Orders\Repositories\" />
-    <Folder Include="Modules\Products\Events\" />
-    <Folder Include="Modules\Products\Queries\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

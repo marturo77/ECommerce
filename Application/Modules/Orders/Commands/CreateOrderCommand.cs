@@ -10,7 +10,7 @@ namespace Application.Modules.Products.Commands
     /// Comando para Crear un producto, la caracteristica de este comando es que la logica esta definido
     /// en terminos de abstracciones, de manera que asegura la portabilidad y la mantenibilidad
     /// </summary>
-    public static class CreateProductCommand
+    public static class CreateOrderCommand
     {
         /// <summary>
         ///
@@ -101,7 +101,7 @@ namespace Application.Modules.Products.Commands
 
                     if (response is not null)
                     {
-                        // Notifica que el producto fue creado correctamente usando emisor de eventos de MediatR
+                        // Notifica que la orden fue creada correctamente usando emisor de eventos de MediatR
                         await _publisher.Publish(new ProductCreatedEventArgs(response.ProductId));
                         return new Response(response.ProductId);
                     }

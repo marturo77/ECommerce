@@ -3,9 +3,9 @@
 namespace Application.Modules.Products.Repositories
 {
     /// <summary>
-    ///
+    /// Abstraccion para el repositorio para operaciones de escritura
     /// </summary>
-    public interface IProduct
+    public interface IProductRepository
     {
         /// <summary>
         /// Crea y actualiza un producto
@@ -13,5 +13,12 @@ namespace Application.Modules.Products.Repositories
         /// <param name="product"></param>
         /// <returns></returns>
         Task<ProductInfo> Set(ProductInfo product);
+
+        /// <summary>
+        /// Borrar un producto
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        Task<bool> Delete(int productId);
     }
 }
