@@ -23,25 +23,17 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ECommerceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnString")));
 
-// Configurar Swagger para la documentación de la API
-builder.Services.RegisterSwagger();
-
 var app = builder.Build();
 
-builder.Services.RegisterValidators();
+builder.Services
+    .RegisterMediator()
+    .RegisterValidators()
+    .RegisterDatabase(builder.Configuration)
+    .RegisterSwagger();
 
-// Configurar el middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ECommerce API v1"));
-}
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ECommerce API v1"));
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
