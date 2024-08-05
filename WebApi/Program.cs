@@ -2,19 +2,8 @@ using Todo.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAllOrigins",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
-
 builder.Services
+    .RegisterCors()
     .RegisterMediator()
     .RegisterValidators()
     .RegisterDatabase(builder.Configuration)
