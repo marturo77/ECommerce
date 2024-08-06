@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Product } from './products.service';
 
 export interface OrderItem {
   orderItemId: number;
@@ -10,11 +11,12 @@ export interface OrderItem {
   productId: number;
   quantity: number;
   price: number;
+  product?: Product; 
 }
 
 export interface Order {
   orderId: number;
-  customer: string; 
+  customer: string;
   orderDate: string;
   status: string;
   total: number;

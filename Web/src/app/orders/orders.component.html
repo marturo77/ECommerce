@@ -17,7 +17,7 @@
           <p class="card-text"><strong>Productos:</strong></p>
           <ul>
             <li *ngFor="let item of order.orderItems">
-              ID de Producto: {{ item.productId }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
+              Producto: {{ item.product?.name || 'N/A' }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
             </li>
           </ul>
         </div>

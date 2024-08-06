@@ -43,6 +43,11 @@ export class OrdersComponent implements OnInit {
   loadOrders(): void {
     this.ordersService.getOrders().subscribe(data => {
       this.orders = data;
+      this.orders.forEach(order => {
+        order.orderItems.forEach(item => {
+          item.product = this.products.find(p => p.productId === item.productId); // Asegúrate de que esto devuelve undefined si no se encuentra
+        });
+      });
     });
   }
 
