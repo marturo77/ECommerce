@@ -25,7 +25,7 @@ public static class OrderEndPoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> CreateOrder([FromBody] CreateProductCommand.RequestCreate request, ISender sender,
+    private static async Task<IResult> CreateOrder([FromBody] CreateOrderCommand.RequestCreateOrder request, ISender sender,
         CancellationToken cancellationToken)
     {
         var response = await sender.Send(request);
@@ -42,7 +42,7 @@ public static class OrderEndPoints
     private static async Task<IResult> DeleteOrder([FromQuery] int id, ISender sender,
        CancellationToken cancellationToken)
     {
-        DeleteProductCommand.RequestDelete request = new DeleteProductCommand.RequestDelete(id);
+        DeleteOrderCommand.RequestDeleteOrder request = new DeleteOrderCommand.RequestDeleteOrder(id);
         var response = await sender.Send(request);
         return Results.Ok(response);
     }

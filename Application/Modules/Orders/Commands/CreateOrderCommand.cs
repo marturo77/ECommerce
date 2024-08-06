@@ -18,7 +18,7 @@ namespace Application.Modules.Products.Commands
         /// <param name="FirstName"></param>
         /// <param name="LastName"></param>
         /// <param name="Email"></param>
-        public record RequestCreateOrder(DateTime OrderDate, string Customer, string Status, ICollection<OrderItemInfo> OrderItems, decimal Total) : IRequest<Response>
+        public record RequestCreateOrder(int OrderId, DateTime OrderDate, string Customer, string Status, ICollection<OrderItemInfo> OrderItems, decimal Total) : IRequest<Response>
         {
             /// <summary>
             ///  Conversion usando el compilador de entidades, convierte un request a un objeto de negocio
@@ -31,7 +31,8 @@ namespace Application.Modules.Products.Commands
                     CustomerName = request.Customer,
                     OrderItems = request.OrderItems,
                     Status = request.Status,
-                    Total = request.Total
+                    Total = request.Total,
+                    OrderId = request.OrderId
                 };
         }
 

@@ -1,4 +1,5 @@
 ﻿using Application.Modules.Products.Models;
+using System.Text.Json.Serialization;
 
 namespace Application.Modules.Orders.Models
 {
@@ -35,11 +36,13 @@ namespace Application.Modules.Orders.Models
         /// <summary>
         /// Entidad orden
         /// </summary>
+        [JsonIgnore]
         public OrderInfo Order { get; set; }
 
         /// <summary>
         /// Entidad producto
         /// </summary>
+        [JsonIgnore]
         public ProductInfo Product { get; set; }
     }
 }

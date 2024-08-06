@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Todo.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);

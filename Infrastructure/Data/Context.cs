@@ -44,7 +44,7 @@ namespace Business
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderInfo>()
-               .HasKey(o => o.OrderId); // Definir la clave primaria
+             .HasKey(o => o.OrderId);
 
             modelBuilder.Entity<OrderInfo>()
                 .Property(o => o.Total)
@@ -56,7 +56,7 @@ namespace Business
                 .HasForeignKey(oi => oi.OrderId);
 
             modelBuilder.Entity<OrderItemInfo>()
-                .HasKey(oi => oi.OrderItemId); // Definir la clave primaria
+                .HasKey(oi => oi.OrderItemId);
 
             modelBuilder.Entity<OrderItemInfo>()
                 .Property(oi => oi.Price)
@@ -68,11 +68,24 @@ namespace Business
                 .HasForeignKey(oi => oi.ProductId);
 
             modelBuilder.Entity<ProductInfo>()
-                .HasKey(p => p.ProductId); // Definir la clave primaria
+                .HasKey(p => p.ProductId);
 
             modelBuilder.Entity<ProductInfo>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");
+
+            // Asegúrate de que OrderId, OrderItemId y ProductId sean columnas de identidad
+            modelBuilder.Entity<OrderInfo>()
+                .Property(o => o.OrderId)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<OrderItemInfo>()
+                .Property(oi => oi.OrderItemId)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ProductInfo>()
+                .Property(p => p.ProductId)
+                .ValueGeneratedOnAdd();
         }
     }
 }

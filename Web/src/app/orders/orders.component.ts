@@ -18,7 +18,7 @@ export class OrdersComponent implements OnInit {
   products: Product[] = [];
   newOrder: Order = {
     orderId: 0,
-    customer: '',
+    customerName: '',
     orderDate: '',
     status: '',
     total: 0,
@@ -44,7 +44,7 @@ export class OrdersComponent implements OnInit {
   }
 
   loadOrders(): void {
-    this.ordersService.getOrders().subscribe(data => {
+    this.ordersService.getOrders().subscribe(data => {      
       this.orders = Array.isArray(data) ? data : [];
       this.orders.forEach(order => {
         order.orderItems.forEach(item => {
@@ -116,7 +116,7 @@ export class OrdersComponent implements OnInit {
   resetForm(): void {
     this.newOrder = {
       orderId: 0,
-      customer: '',
+      customerName: '',
       orderDate: '',
       status: '',
       total: 0,

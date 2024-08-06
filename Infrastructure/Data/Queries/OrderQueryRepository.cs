@@ -28,14 +28,16 @@ internal class OrderQueryRepository : IOrderQuery
     {
         if (string.IsNullOrEmpty(customerName))
         {
-            return await _context.Orders
-                .ToListAsync();
+            return  await _context.Orders
+                 .Include(o => o.OrderItems)
+                 .ThenInclude(oi => oi.Product)
+                 .ToListAsync();
         }
         else
         {
             return await _context.Orders
-              .Where(x => x.CustomerName.ToLower().Contains(customerName.ToLower()))
-              .ToListAsync();
+                .Where(x => x.CustomerName.ToLower().Contains(customerName.ToLower()))
+                                 .ToListAsync();
         }
     }
 }

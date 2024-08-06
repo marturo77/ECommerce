@@ -23,7 +23,7 @@ export class ProductsService {
 
   getProducts(): Observable<Product[]> {
     return this.http.get<{ items: Product[] }>(this.apiUrl).pipe(
-      map(response => response.items),  // Ajustar la respuesta para devolver la matriz de productos
+      map(response => response.items),  
       catchError(this.handleError)
     );
   }

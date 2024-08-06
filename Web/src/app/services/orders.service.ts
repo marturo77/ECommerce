@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import { Product } from './products.service';
+import { catchError, map } from 'rxjs/operators';
 
 export interface OrderItem {
   orderItemId: number;
@@ -11,12 +9,21 @@ export interface OrderItem {
   productId: number;
   quantity: number;
   price: number;
-  product?: Product; 
+  product?: Product;
+}
+
+export interface Product {
+  productId: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
 }
 
 export interface Order {
   orderId: number;
-  customer: string;
+  customerName: string;
   orderDate: string;
   status: string;
   total: number;
@@ -27,12 +34,13 @@ export interface Order {
   providedIn: 'root'
 })
 export class OrdersService {
-  private apiUrl = `${environment.apiUrl}/orders`;
+  private apiUrl = 'https://localhost:7151/api/orders';
 
   constructor(private http: HttpClient) { }
 
   getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(this.apiUrl).pipe(
+    return this.http.get<{ items: Order[] }>(this.apiUrl).pipe(
+      map(response => response.items),  
       catchError(this.handleError)
     );
   }
@@ -49,25 +57,8 @@ export class OrdersService {
     );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      if (error.error.errors) {
-        const validationErrors = [];
-        for (const key in error.error.errors) {
-          if (error.error.errors.hasOwnProperty(key)) {
-            validationErrors.push(`${key}: ${error.error.errors[key].join(', ')}`);
-          }
-        }
-        errorMessage = validationErrors.join('\n');
-      } else {
-        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      }
-    }
-    return throwError(errorMessage);
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred', error);
+    return throwError(error);
   }
 }

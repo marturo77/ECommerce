@@ -10,14 +10,14 @@
       <div class="card h-100">
         <div class="card-body">
           <h5 class="card-title">ID de Orden: {{ order.orderId }}</h5>
-          <p class="card-text"><strong>Cliente:</strong> {{ order.customer }}</p>
+          <p class="card-text"><strong>Cliente:</strong> {{ order.customerName }}</p>
           <p class="card-text"><strong>Fecha:</strong> {{ order.orderDate }}</p>
           <p class="card-text"><strong>Estado:</strong> {{ order.status }}</p>
           <p class="card-text"><strong>Total:</strong> ${{ order.total }}</p>
           <p class="card-text"><strong>Productos:</strong></p>
           <ul>
             <li *ngFor="let item of order.orderItems">
-              Producto: {{ item.product?.name || 'N/A' }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
+              Producto ID: {{ item.productId }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
             </li>
           </ul>
         </div>
@@ -33,7 +33,7 @@
     <form (ngSubmit)="createOrder()">
       <div class="mb-3">
         <label for="customer" class="form-label">Cliente</label>
-        <input type="text" class="form-control" id="customer" [(ngModel)]="newOrder.customer" name="customer" required>
+        <input type="text" class="form-control" id="customer" [(ngModel)]="newOrder.customerName" name="customerName" required>
       </div>
       <div class="mb-3">
         <label for="status" class="form-label">Estado</label>
@@ -55,7 +55,7 @@
       <h4>Productos en la Nueva Orden</h4>
       <ul>
         <li *ngFor="let item of newOrder.orderItems">
-          Producto: {{ item.product?.name || 'N/A' }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
+          Producto ID: {{ item.productId }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
           <button class="btn btn-link" (click)="removeOrderItem(item)">Eliminar</button>
         </li>
       </ul>
