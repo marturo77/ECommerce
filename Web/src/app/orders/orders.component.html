@@ -61,7 +61,7 @@
         </div>
         <div class="mb-3">
           <label for="quantity" class="form-label">Cantidad</label>
-          <input type="number" class="form-control" id="quantity" [(ngModel)]="newOrderItem.quantity" name="quantity" (input)="onQuantityChange()" required>
+          <input type="number" class="form-control" id="quantity" [(ngModel)]="newOrderItem.quantity" name="quantity" (change)="onQuantityChange()" required>
         </div>
         <div class="mb-3">
           <label for="price" class="form-label">Precio</label>

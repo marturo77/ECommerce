@@ -43,18 +43,24 @@ export class OrdersComponent implements OnInit {
 
   loadOrders(): void {
     this.ordersService.getOrders().subscribe(data => {
-      this.orders = data;
+      this.orders = Array.isArray(data) ? data : []; // Asegurarse de que 'data' es un array
       this.orders.forEach(order => {
         order.orderItems.forEach(item => {
           item.product = this.products.find(p => p.productId === item.productId);
         });
       });
+    }, error => {
+      this.orders = [];
+      this.errorMessages.push('Error al cargar las órdenes');
     });
   }
 
   loadProducts(): void {
     this.productsService.getProducts().subscribe(data => {
-      this.products = data;
+      this.products = Array.isArray(data) ? data : []; // Asegurarse de que 'data' es un array
+    }, error => {
+      this.products = [];
+      this.errorMessages.push('Error al cargar los productos');
     });
   }
 
