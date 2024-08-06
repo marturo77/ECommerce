@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { OrdersService, Order, OrderItem } from '../services/orders.service';
 import { ProductsService, Product } from '../services/products.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-orders',
@@ -33,8 +34,9 @@ export class OrdersComponent implements OnInit {
   };
   selectedProduct: Product | undefined;
   errorMessages: string[] = [];
+  private modalRef: NgbModalRef | undefined;
 
-  constructor(private ordersService: OrdersService, private productsService: ProductsService) { }
+  constructor(private ordersService: OrdersService, private productsService: ProductsService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -43,24 +45,22 @@ export class OrdersComponent implements OnInit {
 
   loadOrders(): void {
     this.ordersService.getOrders().subscribe(data => {
-      this.orders = Array.isArray(data) ? data : []; // Asegurarse de que 'data' es un array
+      this.orders = Array.isArray(data) ? data : [];
       this.orders.forEach(order => {
         order.orderItems.forEach(item => {
           item.product = this.products.find(p => p.productId === item.productId);
         });
       });
     }, error => {
-      this.orders = [];
-      this.errorMessages.push('Error al cargar las órdenes');
+      this.errorMessages = [error.message];
     });
   }
 
   loadProducts(): void {
     this.productsService.getProducts().subscribe(data => {
-      this.products = Array.isArray(data) ? data : []; // Asegurarse de que 'data' es un array
+      this.products = Array.isArray(data) ? data : [];
     }, error => {
-      this.products = [];
-      this.errorMessages.push('Error al cargar los productos');
+      this.errorMessages = [error.message];
     });
   }
 
@@ -90,6 +90,11 @@ export class OrdersComponent implements OnInit {
 
   addOrderItem(): void {
     if (this.selectedProduct) {
+      const existingItem = this.newOrder.orderItems.find(item => item.productId === this.newOrderItem.productId);
+      if (existingItem) {
+        this.errorMessages = ['Este producto ya está en la orden.'];
+        return;
+      }
       const orderItem: OrderItem = {
         ...this.newOrderItem,
         orderId: this.newOrder.orderId,
@@ -99,7 +104,13 @@ export class OrdersComponent implements OnInit {
       this.newOrder.orderItems = [...this.newOrder.orderItems, orderItem]; // Asegúrate de crear una nueva referencia de array
       this.newOrder.total += orderItem.price;
       this.resetOrderItemForm();
+      this.closeModal();
     }
+  }
+
+  removeOrderItem(item: OrderItem): void {
+    this.newOrder.orderItems = this.newOrder.orderItems.filter(i => i !== item);
+    this.newOrder.total -= item.price;
   }
 
   resetForm(): void {
@@ -138,6 +149,16 @@ export class OrdersComponent implements OnInit {
   onQuantityChange(): void {
     if (this.selectedProduct) {
       this.newOrderItem.price = this.selectedProduct.price * this.newOrderItem.quantity;
+    }
+  }
+
+  openModal(content: any): void {
+    this.modalRef = this.modalService.open(content);
+  }
+
+  closeModal(): void {
+    if (this.modalRef) {
+      this.modalRef.close();
     }
   }
 }
