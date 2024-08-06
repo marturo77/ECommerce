@@ -5,15 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 internal class OrderRepository : IOrderRepository
 {
+    /// <summary>
+    ///
+    /// </summary>
     private readonly ECommerceContext _context;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="context"></param>
     public OrderRepository(ECommerceContext context)
     {
         _context = context;
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="order"></param>
     /// <returns></returns>
@@ -86,12 +93,19 @@ internal class OrderRepository : IOrderRepository
                     Quantity = item.Quantity
                 }).ToList()
             }).Entity;
+
+            await _context.SaveChangesAsync();
+            order = newOrder;
         }
 
-        await _context.SaveChangesAsync();
         return order;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
     public async Task<bool> Delete(int orderId)
     {
         var order = await _context.Orders

@@ -46,7 +46,8 @@ export class OrdersService {
   }
 
   createOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>(this.apiUrl, order).pipe(
+    return this.http.post<{ order: Order }>(this.apiUrl, order).pipe(
+      map(response => response.order), // Mapear la respuesta para extraer la orden
       catchError(this.handleError)
     );
   }

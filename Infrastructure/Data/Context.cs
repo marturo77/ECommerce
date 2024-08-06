@@ -44,7 +44,7 @@ namespace Business
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderInfo>()
-             .HasKey(o => o.OrderId);
+               .HasKey(o => o.OrderId);
 
             modelBuilder.Entity<OrderInfo>()
                 .Property(o => o.Total)
@@ -53,7 +53,8 @@ namespace Business
             modelBuilder.Entity<OrderInfo>()
                 .HasMany(o => o.OrderItems)
                 .WithOne(oi => oi.Order)
-                .HasForeignKey(oi => oi.OrderId);
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade); // Configurar eliminación en cascada
 
             modelBuilder.Entity<OrderItemInfo>()
                 .HasKey(oi => oi.OrderItemId);

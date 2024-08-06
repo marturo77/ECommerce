@@ -39,12 +39,15 @@ public static class OrderEndPoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> DeleteOrder([FromQuery] int id, ISender sender,
-       CancellationToken cancellationToken)
+    private static async Task<IResult> DeleteOrder(int? id, ISender sender, CancellationToken cancellationToken)
     {
-        DeleteOrderCommand.RequestDeleteOrder request = new DeleteOrderCommand.RequestDeleteOrder(id);
-        var response = await sender.Send(request);
-        return Results.Ok(response);
+        if (id.HasValue)
+        {
+            DeleteOrderCommand.RequestDeleteOrder request = new DeleteOrderCommand.RequestDeleteOrder(id.Value);
+            var response = await sender.Send(request);
+            return Results.Ok(response);
+        }
+        else return Results.BadRequest("No se ha proporcionado identificador");
     }
 
     /// <summary>

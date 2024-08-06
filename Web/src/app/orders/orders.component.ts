@@ -44,8 +44,9 @@ export class OrdersComponent implements OnInit {
   }
 
   loadOrders(): void {
-    this.ordersService.getOrders().subscribe(data => {      
-      this.orders = Array.isArray(data) ? data : [];
+    this.ordersService.getOrders().subscribe(data => {
+      const ordersArray = data || [];
+      this.orders = Array.isArray(ordersArray) ? ordersArray : [];
       this.orders.forEach(order => {
         order.orderItems.forEach(item => {
           item.product = this.products.find(p => p.productId === item.productId);
@@ -98,10 +99,10 @@ export class OrdersComponent implements OnInit {
       const orderItem: OrderItem = {
         ...this.newOrderItem,
         orderId: this.newOrder.orderId,
-        price: this.selectedProduct.price * this.newOrderItem.quantity, // Calcular el precio basado en la cantidad
-        product: this.selectedProduct // Asignar el producto seleccionado
+        price: this.selectedProduct.price * this.newOrderItem.quantity,
+        product: this.selectedProduct
       };
-      this.newOrder.orderItems = [...this.newOrder.orderItems, orderItem]; // Asegúrate de crear una nueva referencia de array
+      this.newOrder.orderItems = [...this.newOrder.orderItems, orderItem];
       this.newOrder.total += orderItem.price;
       this.resetOrderItemForm();
       this.closeModal();

@@ -18,7 +18,7 @@ namespace Application.Modules.Products.Commands
         /// <param name="FirstName"></param>
         /// <param name="LastName"></param>
         /// <param name="Email"></param>
-        public record RequestCreateOrder(int OrderId, DateTime OrderDate, string Customer, string Status, ICollection<OrderItemInfo> OrderItems, decimal Total) : IRequest<Response>
+        public record RequestCreateOrder(int OrderId, DateTime OrderDate, string CustomerName, string Status, ICollection<OrderItemInfo> OrderItems, decimal Total) : IRequest<Response>
         {
             /// <summary>
             ///  Conversion usando el compilador de entidades, convierte un request a un objeto de negocio
@@ -28,7 +28,7 @@ namespace Application.Modules.Products.Commands
                 new()
                 {
                     OrderDate = request.OrderDate,
-                    CustomerName = request.Customer,
+                    CustomerName = request.CustomerName,
                     OrderItems = request.OrderItems,
                     Status = request.Status,
                     Total = request.Total,
@@ -44,7 +44,7 @@ namespace Application.Modules.Products.Commands
             public RequestValidator()
             {
                 RuleFor(x => x).NotNull();
-                RuleFor(x => x.Customer)
+                RuleFor(x => x.CustomerName)
                     .NotEmpty()
                     .MaximumLength(256);
             }
@@ -100,11 +100,11 @@ namespace Application.Modules.Products.Commands
                     {
                         // Notifica que la orden fue creada correctamente usando emisor de eventos de MediatR
                         await _publisher.Publish(new OrderCreatedEventArgs(response.OrderId));
-                        return new Response(response.OrderId);
+                        return new Response(response);
                     }
-                    else return new Response(0);
+                    else return new Response(null);
                 }
-                else return new Response(0);
+                else return new Response(null);
             }
         }
 
@@ -112,6 +112,6 @@ namespace Application.Modules.Products.Commands
         ///
         /// </summary>
         /// <param name="productId"></param>
-        public record Response(int productId);
+        public record Response(OrderInfo? order);
     }
 }
