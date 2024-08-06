@@ -37,8 +37,8 @@ export class OrdersComponent implements OnInit {
   constructor(private ordersService: OrdersService, private productsService: ProductsService) { }
 
   ngOnInit(): void {
-    this.loadOrders();
     this.loadProducts();
+    this.loadOrders();
   }
 
   loadOrders(): void {
