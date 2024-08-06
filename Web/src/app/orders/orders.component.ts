@@ -28,9 +28,10 @@ export class OrdersComponent implements OnInit {
     orderId: 0,
     productId: 0,
     quantity: 0,
-    price: 0
+    price: 0,
+    product: undefined
   };
-  selectedProduct: Product | null = null;
+  selectedProduct: Product | undefined;
   errorMessages: string[] = [];
 
   constructor(private ordersService: OrdersService, private productsService: ProductsService) { }
@@ -91,7 +92,7 @@ export class OrdersComponent implements OnInit {
       };
       this.newOrder.orderItems.push(orderItem);
       this.newOrder.total += orderItem.price * orderItem.quantity;
-      //this.resetOrderItemForm();
+      this.resetOrderItemForm();
     }
   }
 
@@ -104,7 +105,7 @@ export class OrdersComponent implements OnInit {
       total: 0,
       orderItems: []
     };
-    this.selectedProduct = null;
+    this.selectedProduct = undefined;
   }
 
   resetOrderItemForm(): void {
@@ -113,15 +114,16 @@ export class OrdersComponent implements OnInit {
       orderId: 0,
       productId: 0,
       quantity: 0,
-      price: 0
+      price: 0,
+      product: undefined
     };
-    this.selectedProduct = null;
+    this.selectedProduct = undefined;
   }
 
   onProductChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const productId = Number(target.value);
-    this.selectedProduct = this.products.find(p => p.productId === productId) || null;
+    this.selectedProduct = this.products.find(p => p.productId === productId);
     if (this.selectedProduct) {
       this.newOrderItem.price = this.selectedProduct.price;
     }

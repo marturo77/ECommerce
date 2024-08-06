@@ -28,7 +28,7 @@
         /// <summary>
         /// Nombre del cliente
         /// </summary>
-        public string Customer { get; set; }
+        public string CustomerName { get; set; }
 
         /// <summary>
         /// Listado de items incluidos en la orden

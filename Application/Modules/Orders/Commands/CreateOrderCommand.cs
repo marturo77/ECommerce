@@ -28,7 +28,7 @@ namespace Application.Modules.Products.Commands
                 new()
                 {
                     OrderDate = request.OrderDate,
-                    Customer = request.Customer,
+                    CustomerName = request.Customer,
                     OrderItems = request.OrderItems,
                     Status = request.Status,
                     Total = request.Total

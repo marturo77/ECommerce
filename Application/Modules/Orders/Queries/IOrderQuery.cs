@@ -12,6 +12,6 @@ namespace Application.Modules.Orders.Queries
         /// </summary>
         /// <param name="customerName"></param>
         /// <returns></returns>
-        Task<ICollection<OrderInfo>> ListAsync(string customerName);
+        Task<ICollection<OrderInfo>> ListAsync(string? customerName);
     }
 }

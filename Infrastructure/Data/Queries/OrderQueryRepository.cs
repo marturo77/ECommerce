@@ -19,10 +19,23 @@ internal class OrderQueryRepository : IOrderQuery
         _context = context;
     }
 
-    public async Task<ICollection<OrderInfo>> ListAsync(string customerName)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="customerName"></param>
+    /// <returns></returns>
+    public async Task<ICollection<OrderInfo>> ListAsync(string? customerName)
     {
-        return await _context.Orders
-            .Where(x => x.Customer.ToLower().Contains(customerName.ToLower()))
-            .ToListAsync();
+        if (string.IsNullOrEmpty(customerName))
+        {
+            return await _context.Orders
+                .ToListAsync();
+        }
+        else
+        {
+            return await _context.Orders
+              .Where(x => x.CustomerName.ToLower().Contains(customerName.ToLower()))
+              .ToListAsync();
+        }
     }
 }

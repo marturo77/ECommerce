@@ -54,10 +54,10 @@ public static class OrderEndPoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> ListOrder([FromQuery] string name, ISender sender,
+    private static async Task<IResult> ListOrder([FromQuery] string? name, ISender sender,
        CancellationToken cancellationToken)
     {
-        ListProductCommand.RequestList request = new ListProductCommand.RequestList(name);
+        ListOrderCommand.RequestListOrder request = new ListOrderCommand.RequestListOrder(name);
         var response = await sender.Send(request);
         return Results.Ok(response);
     }

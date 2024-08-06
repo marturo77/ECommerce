@@ -15,7 +15,7 @@ namespace Application.Modules.Products.Commands
         ///
         /// </summary>
         /// <param name="name"></param>
-        public record RequestListOrder(string Name) : IRequest<Response>
+        public record RequestListOrder(string? Name) : IRequest<Response>
         {
         }
 
