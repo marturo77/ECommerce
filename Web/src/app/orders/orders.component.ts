@@ -45,7 +45,7 @@ export class OrdersComponent implements OnInit {
       this.orders = data;
       this.orders.forEach(order => {
         order.orderItems.forEach(item => {
-          item.product = this.products.find(p => p.productId === item.productId); // Asegúrate de que esto devuelve undefined si no se encuentra
+          item.product = this.products.find(p => p.productId === item.productId);
         });
       });
     });
@@ -86,11 +86,12 @@ export class OrdersComponent implements OnInit {
       const orderItem: OrderItem = {
         ...this.newOrderItem,
         orderId: this.newOrder.orderId,
-        price: this.selectedProduct.price // Utilizar el precio del producto seleccionado
+        price: this.selectedProduct.price, // Utilizar el precio del producto seleccionado
+        product: this.selectedProduct // Asignar el producto seleccionado
       };
       this.newOrder.orderItems.push(orderItem);
       this.newOrder.total += orderItem.price * orderItem.quantity;
-      this.resetOrderItemForm();
+      //this.resetOrderItemForm();
     }
   }
 
