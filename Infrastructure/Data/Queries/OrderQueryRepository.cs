@@ -1,6 +1,7 @@
 using Application.Modules.Orders.Models;
 using Application.Modules.Orders.Queries;
 using Business;
+using Microsoft.EntityFrameworkCore;
 
 internal class OrderQueryRepository : IOrderQuery
 {
@@ -18,8 +19,10 @@ internal class OrderQueryRepository : IOrderQuery
         _context = context;
     }
 
-    public Task<ICollection<OrderInfo>> ListAsync(string customerName)
+    public async Task<ICollection<OrderInfo>> ListAsync(string customerName)
     {
-        throw new NotImplementedException();
+        return await _context.Orders
+            .Where(x => x.Customer.ToLower().Contains(customerName.ToLower()))
+            .ToListAsync();
     }
 }

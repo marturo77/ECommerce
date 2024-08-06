@@ -1,6 +1,7 @@
 using Application.Modules.Products.Models;
 using Application.Modules.Products.Queries;
 using Business;
+using Microsoft.EntityFrameworkCore;
 
 internal class ProductQueryRepository : IProductQuery
 {
@@ -18,8 +19,15 @@ internal class ProductQueryRepository : IProductQuery
         _context = context;
     }
 
-    public Task<ICollection<ProductInfo>> ListAsync(string name)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public async Task<ICollection<ProductInfo>> ListAsync(string name)
     {
-        throw new NotImplementedException();
+        return await _context.Products
+             .Where(x => x.Name.ToLower().Contains(name.ToLower()))
+             .ToListAsync();
     }
 }
