@@ -1,7 +1,3 @@
-Claro, aquí tienes una versión mejorada que enfatiza más los conceptos de arquitectura limpia según los estándares internacionales de ingeniería de software:
-
----
-
 # Prueba Técnica por Marcelo Arturo Duarte
 
 ## Descripción del Prototipo
