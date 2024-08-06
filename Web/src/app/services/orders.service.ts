@@ -14,7 +14,7 @@ export interface OrderItem {
 
 export interface Order {
   orderId: number;
-  customerId: number;
+  customer: string; 
   orderDate: string;
   status: string;
   total: number;
@@ -37,6 +37,12 @@ export class OrdersService {
 
   createOrder(order: Order): Observable<Order> {
     return this.http.post<Order>(this.apiUrl, order).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteOrder(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }

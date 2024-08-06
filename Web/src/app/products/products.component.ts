@@ -40,6 +40,7 @@ export class ProductsComponent implements OnInit {
       product => {
         this.products.push(product);
         this.resetForm();
+        this.loadProducts();
         this.errorMessages = [];
       },
       error => {

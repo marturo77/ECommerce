@@ -1,63 +1,74 @@
 <div class="container mt-5">
-  <h2 class="mb-4">Order List</h2>
+  <h2 class="mb-4">Lista de Órdenes</h2>
   <div *ngIf="errorMessages.length" class="alert alert-danger mt-3">
     <ul>
       <li *ngFor="let errorMessage of errorMessages">{{ errorMessage }}</li>
     </ul>
   </div>
   <div class="row">
-    <div class="col-md-4 mb-4" *ngFor="let order of orders">
+    <div class="col-md-6 mb-4" *ngFor="let order of orders">
       <div class="card h-100">
         <div class="card-body">
-          <h5 class="card-title">Order #{{ order.orderId }}</h5>
-          <p class="card-text"><strong>Status:</strong> {{ order.status }}</p>
+          <h5 class="card-title">ID de Orden: {{ order.orderId }}</h5>
+          <p class="card-text"><strong>Cliente:</strong> {{ order.customer }}</p>
+          <p class="card-text"><strong>Fecha:</strong> {{ order.orderDate }}</p>
+          <p class="card-text"><strong>Estado:</strong> {{ order.status }}</p>
           <p class="card-text"><strong>Total:</strong> ${{ order.total }}</p>
+          <p class="card-text"><strong>Productos:</strong></p>
           <ul>
             <li *ngFor="let item of order.orderItems">
-              Product ID: {{ item.productId }}, Quantity: {{ item.quantity }}, Price: ${{ item.price }}
+              ID de Producto: {{ item.productId }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
             </li>
           </ul>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <button class="btn btn-danger" (click)="deleteOrder(order.orderId)">Eliminar</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="mt-5">
-    <h3>Add New Order</h3>
+    <h3>Agregar Nueva Orden</h3>
     <form (ngSubmit)="createOrder()">
       <div class="mb-3">
-        <label for="customerId" class="form-label">Customer ID</label>
-        <input type="number" class="form-control" id="customerId" [(ngModel)]="newOrder.customerId" name="customerId" required>
+        <label for="customer" class="form-label">Cliente</label>
+        <input type="text" class="form-control" id="customer" [(ngModel)]="newOrder.customer" name="customer" required>
       </div>
       <div class="mb-3">
-        <label for="orderDate" class="form-label">Order Date</label>
+        <label for="status" class="form-label">Estado</label>
+        <input type="text" class="form-control" id="status" [(ngModel)]="newOrder.status" name="status" required>
+      </div>
+      <div class="mb-3">
+        <label for="orderDate" class="form-label">Fecha de Orden</label>
         <input type="date" class="form-control" id="orderDate" [(ngModel)]="newOrder.orderDate" name="orderDate" required>
       </div>
       <div class="mb-3">
-        <label for="status" class="form-label">Status</label>
-        <input type="text" class="form-control" id="status" [(ngModel)]="newOrder.status" name="status" required>
+        <label for="total" class="form-label">Total</label>
+        <input type="number" class="form-control" id="total" [(ngModel)]="newOrder.total" name="total" readonly>
       </div>
-      <h4>Add Order Items</h4>
-      <div class="mb-3">
-        <label for="productId" class="form-label">Product</label>
-        <select class="form-control" id="productId" [(ngModel)]="newOrderItem.productId" name="productId" required>
-          <option *ngFor="let product of products" [value]="product.productId">{{ product.name }}</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="quantity" class="form-label">Quantity</label>
-        <input type="number" class="form-control" id="quantity" [(ngModel)]="newOrderItem.quantity" name="quantity" required>
-      </div>
-      <button type="button" class="btn btn-secondary" (click)="addOrderItem()">Add Item</button>
-      <button type="submit" class="btn btn-success">Create Order</button>
+      <button type="submit" class="btn btn-success">Crear Orden</button>
     </form>
+
     <div class="mt-3">
-      <h4>Order Items</h4>
-      <ul>
-        <li *ngFor="let item of newOrder.orderItems">
-          Product ID: {{ item.productId }}, Quantity: {{ item.quantity }}, Price: ${{ item.price }}
-        </li>
-      </ul>
+      <h4>Agregar Productos a la Orden</h4>
+      <form (ngSubmit)="addOrderItem()">
+        <div class="mb-3">
+          <label for="productId" class="form-label">Producto</label>
+          <select class="form-select" id="productId" [(ngModel)]="newOrderItem.productId" name="productId" (change)="onProductChange($event)" required>
+            <option *ngFor="let product of products" [value]="product.productId">{{ product.name }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="quantity" class="form-label">Cantidad</label>
+          <input type="number" class="form-control" id="quantity" [(ngModel)]="newOrderItem.quantity" name="quantity" (input)="onQuantityChange()" required>
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Precio</label>
+          <input type="number" class="form-control" id="price" [(ngModel)]="newOrderItem.price" name="price" readonly>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Producto</button>
+      </form>
     </div>
   </div>
 </div>

@@ -17,9 +17,9 @@ export class OrdersComponent implements OnInit {
   products: Product[] = [];
   newOrder: Order = {
     orderId: 0,
-    customerId: 0,
-    orderDate: new Date().toISOString().substring(0, 10),
-    status: 'Pending',
+    customer: '',
+    orderDate: '',
+    status: '',
     total: 0,
     orderItems: []
   };
@@ -27,36 +27,29 @@ export class OrdersComponent implements OnInit {
     orderItemId: 0,
     orderId: 0,
     productId: 0,
-    quantity: 1,
+    quantity: 0,
     price: 0
   };
+  selectedProduct: Product | null = null;
   errorMessages: string[] = [];
 
   constructor(private ordersService: OrdersService, private productsService: ProductsService) { }
 
   ngOnInit(): void {
+    this.loadOrders();
+    this.loadProducts();
+  }
+
+  loadOrders(): void {
     this.ordersService.getOrders().subscribe(data => {
       this.orders = data;
     });
+  }
+
+  loadProducts(): void {
     this.productsService.getProducts().subscribe(data => {
       this.products = data;
     });
-  }
-
-  addOrderItem(): void {
-    const product = this.products.find(p => p.productId === this.newOrderItem.productId);
-    if (product) {
-      this.newOrderItem.price = product.price;
-      this.newOrder.orderItems.push({ ...this.newOrderItem });
-      this.newOrder.total += this.newOrderItem.price * this.newOrderItem.quantity;
-      this.newOrderItem = {
-        orderItemId: 0,
-        orderId: 0,
-        productId: 0,
-        quantity: 1,
-        price: 0
-      };
-    }
   }
 
   createOrder(): void {
@@ -72,21 +65,65 @@ export class OrdersComponent implements OnInit {
     );
   }
 
+  deleteOrder(id: number): void {
+    this.ordersService.deleteOrder(id).subscribe(
+      () => {
+        this.orders = this.orders.filter(order => order.orderId !== id);
+      },
+      error => {
+        this.errorMessages = error.split('\n');
+      }
+    );
+  }
+
+  addOrderItem(): void {
+    if (this.selectedProduct) {
+      const orderItem: OrderItem = {
+        ...this.newOrderItem,
+        orderId: this.newOrder.orderId,
+        price: this.selectedProduct.price // Utilizar el precio del producto seleccionado
+      };
+      this.newOrder.orderItems.push(orderItem);
+      this.newOrder.total += orderItem.price * orderItem.quantity;
+      this.resetOrderItemForm();
+    }
+  }
+
   resetForm(): void {
     this.newOrder = {
       orderId: 0,
-      customerId: 0,
-      orderDate: new Date().toISOString().substring(0, 10),
-      status: 'Pending',
+      customer: '',
+      orderDate: '',
+      status: '',
       total: 0,
       orderItems: []
     };
+    this.selectedProduct = null;
+  }
+
+  resetOrderItemForm(): void {
     this.newOrderItem = {
       orderItemId: 0,
       orderId: 0,
       productId: 0,
-      quantity: 1,
+      quantity: 0,
       price: 0
     };
+    this.selectedProduct = null;
+  }
+
+  onProductChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const productId = Number(target.value);
+    this.selectedProduct = this.products.find(p => p.productId === productId) || null;
+    if (this.selectedProduct) {
+      this.newOrderItem.price = this.selectedProduct.price;
+    }
+  }
+
+  onQuantityChange(): void {
+    if (this.selectedProduct) {
+      this.newOrderItem.price = this.selectedProduct.price * this.newOrderItem.quantity;
+    }
   }
 }
