@@ -19,7 +19,7 @@ export class OrdersComponent implements OnInit {
   newOrder: Order = {
     orderId: 0,
     customerName: '',
-    orderDate: '',
+    orderDate: new Date().toISOString().split('T')[0],  // Fecha actual
     status: '',
     total: 0,
     orderItems: []

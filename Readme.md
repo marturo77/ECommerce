@@ -36,7 +36,7 @@ Se utilizó el patrón Mediator para manejar las solicitudes de comandos y consu
 
 ### Implementación de Endpoints
 
-Los endpoints del API se implementaron utilizando Minimal APIs, una característica introducida en .NET 6, que permite definir rutas de manera más concisa y directa. Este enfoque simplifica la comprensión y el mantenimiento del código.
+Los endpoints del API se implementaron utilizando Minimal APIs REST, una característica introducida en .NET 6, que permite definir rutas de manera más concisa y directa. Este enfoque simplifica la comprensión y el mantenimiento del código.
 
 ### Ventajas de la Arquitectura Implementada
 

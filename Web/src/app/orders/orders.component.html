@@ -1,91 +1,104 @@
 <div class="container mt-5">
-  <h2 class="mb-4">Lista de Órdenes</h2>
-  <div *ngIf="errorMessages.length" class="alert alert-danger mt-3">
-    <ul>
-      <li *ngFor="let errorMessage of errorMessages">{{ errorMessage }}</li>
-    </ul>
-  </div>
-  <div class="row">
-    <div class="col-md-6 mb-4" *ngFor="let order of orders">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">ID de Orden: {{ order.orderId }}</h5>
-          <p class="card-text"><strong>Cliente:</strong> {{ order.customerName }}</p>
-          <p class="card-text"><strong>Fecha:</strong> {{ order.orderDate }}</p>
-          <p class="card-text"><strong>Estado:</strong> {{ order.status }}</p>
-          <p class="card-text"><strong>Total:</strong> ${{ order.total }}</p>
-          <p class="card-text"><strong>Productos:</strong></p>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="list-tab" data-bs-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="true">Lista de Órdenes</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="create-tab" data-bs-toggle="tab" href="#create" role="tab" aria-controls="create" aria-selected="false">Crear Nueva Orden</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list-tab">
+      <h2 class="mb-4">Lista de Órdenes</h2>
+      <div *ngIf="errorMessages.length" class="alert alert-danger mt-3">
+        <ul>
+          <li *ngFor="let errorMessage of errorMessages">{{ errorMessage }}</li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-4" *ngFor="let order of orders">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">ID de Orden: {{ order.orderId }}</h5>
+              <p class="card-text"><strong>Cliente:</strong> {{ order.customerName }}</p>
+              <p class="card-text"><strong>Fecha:</strong> {{ order.orderDate }}</p>
+              <p class="card-text"><strong>Estado:</strong> {{ order.status }}</p>
+              <p class="card-text"><strong>Total:</strong> ${{ order.total }}</p>
+              <p class="card-text"><strong>Productos:</strong></p>
+              <ul>
+                <li *ngFor="let item of order.orderItems">
+                  Producto ID: {{ item.productId }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
+                </li>
+              </ul>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+              <button class="btn btn-danger" (click)="deleteOrder(order.orderId)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="create" role="tabpanel" aria-labelledby="create-tab">
+      <div class="mt-5">
+        <h3>Agregar Nueva Orden</h3>
+        <form (ngSubmit)="createOrder()">
+          <div class="mb-3">
+            <label for="customer" class="form-label">Cliente</label>
+            <input type="text" class="form-control" id="customer" [(ngModel)]="newOrder.customerName" name="customerName" required>
+          </div>
+          <div class="mb-3">
+            <label for="status" class="form-label">Estado</label>
+            <input type="text" class="form-control" id="status" [(ngModel)]="newOrder.status" name="status" required>
+          </div>
+          <div class="mb-3">
+            <label for="orderDate" class="form-label">Fecha de Orden</label>
+            <input type="date" class="form-control" id="orderDate" [(ngModel)]="newOrder.orderDate" name="orderDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="total" class="form-label">Total</label>
+            <input type="number" class="form-control" id="total" [(ngModel)]="newOrder.total" name="total" readonly>
+          </div>
+          <button type="submit" class="btn btn-success">Crear Orden</button>
+          <button type="button" class="btn btn-primary" (click)="openModal(addProductModal)">Agregar Producto</button>
+        </form>
+    
+        <div class="mt-3">
+          <h4>Productos en la Nueva Orden</h4>
           <ul>
-            <li *ngFor="let item of order.orderItems">
+            <li *ngFor="let item of newOrder.orderItems">
               Producto ID: {{ item.productId }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
+              <button class="btn btn-link" (click)="removeOrderItem(item)">Eliminar</button>
             </li>
           </ul>
         </div>
-        <div class="card-footer d-flex justify-content-between">
-          <button class="btn btn-danger" (click)="deleteOrder(order.orderId)">Eliminar</button>
-        </div>
       </div>
     </div>
   </div>
-
-  <div class="mt-5">
-    <h3>Agregar Nueva Orden</h3>
-    <form (ngSubmit)="createOrder()">
-      <div class="mb-3">
-        <label for="customer" class="form-label">Cliente</label>
-        <input type="text" class="form-control" id="customer" [(ngModel)]="newOrder.customerName" name="customerName" required>
-      </div>
-      <div class="mb-3">
-        <label for="status" class="form-label">Estado</label>
-        <input type="text" class="form-control" id="status" [(ngModel)]="newOrder.status" name="status" required>
-      </div>
-      <div class="mb-3">
-        <label for="orderDate" class="form-label">Fecha de Orden</label>
-        <input type="date" class="form-control" id="orderDate" [(ngModel)]="newOrder.orderDate" name="orderDate" required>
-      </div>
-      <div class="mb-3">
-        <label for="total" class="form-label">Total</label>
-        <input type="number" class="form-control" id="total" [(ngModel)]="newOrder.total" name="total" readonly>
-      </div>
-      <button type="submit" class="btn btn-success">Crear Orden</button>
-      <button type="button" class="btn btn-primary" (click)="openModal(addProductModal)">Agregar Producto</button>
-    </form>
-
-    <div class="mt-3">
-      <h4>Productos en la Nueva Orden</h4>
-      <ul>
-        <li *ngFor="let item of newOrder.orderItems">
-          Producto ID: {{ item.productId }}, Cantidad: {{ item.quantity }}, Precio: ${{ item.price }}
-          <button class="btn btn-link" (click)="removeOrderItem(item)">Eliminar</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Modal de Bootstrap -->
-  <ng-template #addProductModal let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title" id="addProductModalLabel">Agregar Producto a la Orden</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
-    </div>
-    <div class="modal-body">
-      <form (ngSubmit)="addOrderItem()">
-        <div class="mb-3">
-          <label for="productId" class="form-label">Producto</label>
-          <select class="form-select" id="productId" [(ngModel)]="newOrderItem.productId" name="productId" (change)="onProductChange($event)" required>
-            <option *ngFor="let product of products" [value]="product.productId">{{ product.name }}</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="quantity" class="form-label">Cantidad</label>
-          <input type="number" class="form-control" id="quantity" [(ngModel)]="newOrderItem.quantity" name="quantity" (input)="onQuantityChange()" required>
-        </div>
-        <div class="mb-3">
-          <label for="price" class="form-label">Precio</label>
-          <input type="number" class="form-control" id="price" [(ngModel)]="newOrderItem.price" name="price" readonly>
-        </div>
-        <button type="submit" class="btn btn-primary">Agregar Producto</button>
-      </form>
-    </div>
-  </ng-template>
 </div>
+
+<!-- Modal de Bootstrap -->
+<ng-template #addProductModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="addProductModalLabel">Agregar Producto a la Orden</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="addOrderItem()">
+      <div class="mb-3">
+        <label for="productId" class="form-label">Producto</label>
+        <select class="form-select" id="productId" [(ngModel)]="newOrderItem.productId" name="productId" (change)="onProductChange($event)" required>
+          <option *ngFor="let product of products" [value]="product.productId">{{ product.name }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="quantity" class="form-label">Cantidad</label>
+        <input type="number" class="form-control" id="quantity" [(ngModel)]="newOrderItem.quantity" name="quantity" (input)="onQuantityChange()" required>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Precio</label>
+        <input type="number" class="form-control" id="price" [(ngModel)]="newOrderItem.price" name="price" readonly>
+      </div>
+      <button type="submit" class="btn btn-primary">Agregar Producto</button>
+    </form>
+  </div>
+</ng-template>
