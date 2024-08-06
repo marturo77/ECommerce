@@ -65,5 +65,5 @@ internal class ProductRepository : IProductRepository
     /// <param name="name"></param>
     /// <returns></returns>
     public async Task<bool> ProductExistAsync(string name) =>
-        await _context.Products.AnyAsync(x => x.Name.Equals(name, StringComparison.InvariantCulture));
+      await _context.Products.AnyAsync(x => x.Name.ToLower() == name.ToLower());
 }

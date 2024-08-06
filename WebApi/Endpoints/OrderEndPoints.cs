@@ -15,7 +15,7 @@ public static class OrderEndPoints
         var group = app.MapGroup("api/orders").WithTags("Orders");
         group.MapPost("", CreateOrder);
         group.MapGet("", ListOrder);
-        group.MapDelete("", DeleteOrder);
+        group.MapDelete("{id:int}", DeleteOrder);
     }
 
     /// <summary>

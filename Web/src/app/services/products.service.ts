@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface Product {
@@ -22,7 +22,8 @@ export class ProductsService {
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl).pipe(
+    return this.http.get<{ items: Product[] }>(this.apiUrl).pipe(
+      map(response => response.items),  // Ajustar la respuesta para devolver la matriz de productos
       catchError(this.handleError)
     );
   }

@@ -1,5 +1,10 @@
 <div class="container mt-5">
   <h2 class="mb-4">Product List</h2>
+  <div *ngIf="errorMessages.length" class="alert alert-danger mt-3">
+    <ul>
+      <li *ngFor="let errorMessage of errorMessages">{{ errorMessage }}</li>
+    </ul>
+  </div>
   <div class="row">
     <div class="col-md-4 mb-4" *ngFor="let product of products">
       <div class="card h-100">
@@ -42,10 +47,5 @@
       </div>
       <button type="submit" class="btn btn-success">Create Product</button>
     </form>
-    <div *ngIf="errorMessages.length" class="alert alert-danger mt-3">
-      <ul>
-        <li *ngFor="let errorMessage of errorMessages">{{ errorMessage }}</li>
-      </ul>
-    </div>
   </div>
 </div>

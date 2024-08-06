@@ -16,6 +16,6 @@ namespace Application.Modules.Products.Queries
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Task<ICollection<ProductInfo>> ListAsync(string name);
+        public Task<ICollection<ProductInfo>> ListAsync(string? name);
     }
 }

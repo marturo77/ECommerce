@@ -16,7 +16,7 @@ public static class ProductEndpoints
         var group = app.MapGroup("api/products").WithTags("Products");
         group.MapPost("", CreateProduct);
         group.MapGet("", ListProduct);
-        group.MapDelete("", DeleteProduct);
+        group.MapDelete("{id:int?}", DeleteProduct);
     }
 
     /// <summary>
@@ -40,12 +40,16 @@ public static class ProductEndpoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> DeleteProduct([FromQuery] int id, ISender sender,
+    private static async Task<IResult> DeleteProduct(int? id, ISender sender,
        CancellationToken cancellationToken)
     {
-        DeleteProductCommand.RequestDelete request = new DeleteProductCommand.RequestDelete(id);
-        var response = await sender.Send(request);
-        return Results.Ok(response);
+        if (id.HasValue)
+        {
+            DeleteProductCommand.RequestDelete request = new DeleteProductCommand.RequestDelete(id.Value);
+            var response = await sender.Send(request);
+            return Results.Ok(response);
+        }
+        else return Results.BadRequest("No se ha incluido un Id");
     }
 
     /// <summary>
@@ -55,7 +59,7 @@ public static class ProductEndpoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> ListProduct([FromQuery] string name, ISender sender,
+    private static async Task<IResult> ListProduct([FromQuery] string? name, ISender sender,
        CancellationToken cancellationToken)
     {
         RequestList request = new RequestList(name);

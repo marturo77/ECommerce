@@ -26,6 +26,10 @@ export class ProductsComponent implements OnInit {
   constructor(private productsService: ProductsService) { }
 
   ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
     this.productsService.getProducts().subscribe(data => {
       this.products = data;
     });
@@ -36,7 +40,7 @@ export class ProductsComponent implements OnInit {
       product => {
         this.products.push(product);
         this.resetForm();
-        this.errorMessages = []; // Clear any previous error messages
+        this.errorMessages = [];
       },
       error => {
         this.errorMessages = error.split('\n');

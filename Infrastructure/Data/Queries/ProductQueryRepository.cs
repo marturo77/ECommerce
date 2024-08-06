@@ -24,10 +24,17 @@ internal class ProductQueryRepository : IProductQuery
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public async Task<ICollection<ProductInfo>> ListAsync(string name)
+    public async Task<ICollection<ProductInfo>> ListAsync(string? name)
     {
-        return await _context.Products
-             .Where(x => x.Name.ToLower().Contains(name.ToLower()))
-             .ToListAsync();
+        if (string.IsNullOrEmpty(name))
+        {
+            return await _context.Products.ToListAsync();
+        }
+        else
+        {
+            return await _context.Products
+                 .Where(x => x.Name.ToLower().Contains(name.ToLower()))
+                 .ToListAsync();
+        }
     }
 }
