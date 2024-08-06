@@ -87,11 +87,11 @@ export class OrdersComponent implements OnInit {
       const orderItem: OrderItem = {
         ...this.newOrderItem,
         orderId: this.newOrder.orderId,
-        price: this.selectedProduct.price, // Utilizar el precio del producto seleccionado
+        price: this.selectedProduct.price * this.newOrderItem.quantity, // Calcular el precio basado en la cantidad
         product: this.selectedProduct // Asignar el producto seleccionado
       };
-      this.newOrder.orderItems.push(orderItem);
-      this.newOrder.total += orderItem.price * orderItem.quantity;
+      this.newOrder.orderItems = [...this.newOrder.orderItems, orderItem]; // Asegúrate de crear una nueva referencia de array
+      this.newOrder.total += orderItem.price;
       this.resetOrderItemForm();
     }
   }
@@ -125,7 +125,7 @@ export class OrdersComponent implements OnInit {
     const productId = Number(target.value);
     this.selectedProduct = this.products.find(p => p.productId === productId);
     if (this.selectedProduct) {
-      this.newOrderItem.price = this.selectedProduct.price;
+      this.newOrderItem.price = this.selectedProduct.price * this.newOrderItem.quantity;
     }
   }
 
