@@ -48,3 +48,6 @@ La aplicación frontend se desarrolló utilizando Angular 18, adoptando una arqu
 Esta arquitectura facilita la reutilización de código y la mantenibilidad del proyecto. 
 La interfaz de usuario se diseñó con Bootstrap 5 para asegurar una experiencia de usuario responsiva y moderna. 
 Además, se implementaron servicios de Angular para gestionar la comunicación con el backend, utilizando RxJS para manejar las operaciones asincrónicas de manera eficiente. La aplicación permite la gestión dinámica de productos y órdenes, integrando de manera fluida con la API desarrollada.
+
+### Funcionalidad de Envío de Notificaciones
+La funcionalidad de envío de notificaciones en tiempo real se implementa utilizando varias tecnologías modernas y técnicas de arquitectura. En el backend, se emplea ASP.NET Core junto con SignalR para la comunicación en tiempo real, y en el frontend de Angular se utiliza ngx-toastr para mostrar notificaciones. La arquitectura se basa en un patrón de publicación-suscripción (Pub-Sub) mediante MediatR para la gestión de eventos. Cuando se crea una nueva orden en el sistema, se publica un evento que es manejado por un NotificationHandler que envía una notificación a todos los clientes conectados a través de SignalR. Las notificaciones se muestran en el frontend utilizando ngx-toastr para mejorar la experiencia del usuario con mensajes emergentes.
