@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { OrdersService, Order, OrderItem } from '../services/orders.service';
 import { ProductsService, Product } from '../services/products.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationService } from '../services/notificationService';
 
 @Component({
   selector: 'app-orders',
@@ -36,7 +37,10 @@ export class OrdersComponent implements OnInit {
   errorMessages: string[] = [];
   private modalRef: NgbModalRef | undefined;
 
-  constructor(private ordersService: OrdersService, private productsService: ProductsService, private modalService: NgbModal) { }
+  constructor(private ordersService: OrdersService, 
+    private productsService: ProductsService, 
+    private modalService: NgbModal,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -118,7 +122,7 @@ export class OrdersComponent implements OnInit {
     this.newOrder = {
       orderId: 0,
       customerName: '',
-      orderDate: '',
+      orderDate: new Date().toISOString().split('T')[0],  // Fecha actual
       status: '',
       total: 0,
       orderItems: []
@@ -132,7 +136,7 @@ export class OrdersComponent implements OnInit {
       orderId: 0,
       productId: 0,
       quantity: 0,
-      price: 0,
+      price: 0,      
       product: undefined
     };
     this.selectedProduct = undefined;

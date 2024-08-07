@@ -8,5 +8,12 @@ public static class MediatorRegister
     /// <param name="services"></param>
     /// <returns></returns>
     public static IServiceCollection RegisterMediator(this IServiceCollection services) =>
-        services.AddMediatR(config => { config.RegisterServicesFromAssembly(AssemblyReference.Assembly); });
+        services.AddMediatR(config => { 
+            
+            
+            config.RegisterServicesFromAssembly(AssemblyReference.Assembly); 
+            
+        
+        });
+
 }

@@ -83,3 +83,22 @@
    - Asegúrate de que todas las rutas de la API están documentadas y accesibles a través de Swagger en `https://localhost:7151/swagger`.
 
 Siguiendo estos pasos, deberías ser capaz de configurar, ejecutar y verificar el correcto funcionamiento del prototipo de la aplicación e-commerce.
+
+
+## Sobre las notificaciones SignalR
+
+### Configuración del Backend:
+
+Se debe tener en cuenta que el dominio que esta autorizado para el hub de signalr es el siguiente, haga los ajustes en caso de ser necesario.
+
+
+```csharp
+options.AddPolicy("AllowSpecificOrigin",
+ builder =>
+ {
+     builder.WithOrigins("http://localhost:4200") // Origen permitido
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials(); 
+ });
+ ```

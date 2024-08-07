@@ -27,7 +27,7 @@ public static class DatabaseRegister
 
         // Registro de cache de repositorios para operaciones CRUD como operaciones de consulta
         // En que los repositorios de consulta y escritura sean diferentes se podria inyectar la cadena de conexion
-        // diferenet para cada implementacion de repositorio, util para escenarios donde se tiene base de datos en modo
+        // diferente para cada implementacion de repositorio, util para escenarios donde se tiene base de datos en modo
         // replicacion o inclusive bases de datos o repositorios en nube como table storage accounts, mongodb etc.
 
         _ = services.AddScoped<IProductRepository, ProductRepository>();

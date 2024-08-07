@@ -1,18 +1,17 @@
-using System.Text.Json.Serialization;
-using Todo.Api.Endpoints;
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+// Registrar servicios adicionales.
 builder.Services
     .RegisterCors()
     .RegisterValidators()
     .RegisterMediator()
     .RegisterDatabase(builder.Configuration)
-    .RegisterSwagger();
+    .RegisterSwagger()
+    .AddSignalR();
 
 var app = builder.Build();
 
+// Como es una prueba tecnica se permite siempre la visualizacion de swagger
 app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ECommerce API v1"));
@@ -21,10 +20,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 // Usar CORS
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowSpecificOrigin");
+app.UseRouting();
+app.UseAuthorization();
 
+// Registrar Endpoints personalizados
 app.RegisterProductsEndpoints();
 app.RegisterOrderEndpoints();
-app.UseRouting();
+
+// Registro de notificaciones
+app.UseSignalR();
 
 app.Run();
