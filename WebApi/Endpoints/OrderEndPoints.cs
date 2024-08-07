@@ -1,9 +1,6 @@
 using Application.Modules.Products.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
-namespace Todo.Api.Endpoints;
-
 public static class OrderEndPoints
 {
     /// <summary>
