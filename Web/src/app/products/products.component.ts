@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ProductsService, Product } from '../services/products.service';
+import { NotificationService } from '../services/notificationService';
 
 @Component({
   selector: 'app-products',
@@ -23,7 +24,7 @@ export class ProductsComponent implements OnInit {
   };
   errorMessages: string[] = [];
 
-  constructor(private productsService: ProductsService) { }
+  constructor(private productsService: ProductsService, private notificationService:NotificationService) { }
 
   ngOnInit(): void {
     this.loadProducts();
