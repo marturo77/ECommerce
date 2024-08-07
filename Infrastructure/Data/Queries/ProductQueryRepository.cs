@@ -13,28 +13,45 @@ internal class ProductQueryRepository : IProductQuery
     /// <summary>
     ///
     /// </summary>
-    /// <param name="context"></param>
-    public ProductQueryRepository(ECommerceContext context)
-    {
-        _context = context;
-    }
+    private readonly ICachingManager _cacheManager;
 
     /// <summary>
     ///
+    /// </summary>
+    /// <param name="context"></param>
+    public ProductQueryRepository(ECommerceContext context, ICachingManager cacheManager)
+    {
+        _context = context;
+        _cacheManager = cacheManager;
+    }
+
+    /// <summary>
+    /// Lista de datos de un cache para un escenario donde la cantidad de informacion no es lo suficientemente enorme
+    /// para optar por otra solucion
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
     public async Task<ICollection<ProductInfo>> ListAsync(string? name)
     {
-        if (string.IsNullOrEmpty(name))
+        // Obtiene los datos del cache
+        ICollection<ProductInfo>? list = _cacheManager.GetData<ICollection<ProductInfo>>(CachingManager.ProductList);
+
+        // Si no hay cache obtiene los datos del repositorio
+        if (list == null)
         {
-            return await _context.Products.ToListAsync();
+            // Obtiene los datos y los guarda en el cache
+            list = await _context.Products.ToListAsync();
+            _cacheManager.SetStandard(CachingManager.ProductList, list);
         }
-        else
+
+        // Aplica el filtro
+        if (!string.IsNullOrEmpty(name))
         {
-            return await _context.Products
-                 .Where(x => x.Name.ToLower().Contains(name.ToLower()))
-                 .ToListAsync();
+            list = list
+                .Where(x => x.Name.ToLower().Contains(name.ToLower()))
+                .ToList();
         }
+
+        return list ?? new List<ProductInfo>();
     }
 }

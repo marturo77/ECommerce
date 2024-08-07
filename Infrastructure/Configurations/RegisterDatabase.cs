@@ -25,15 +25,18 @@ public static class DatabaseRegister
             options.UseSqlServer(configuration.GetConnectionString("ConnString"));
         });
 
-        // Registro del repositorio para productos
+        // Registro de cache de repositorios para operaciones CRUD como operaciones de consulta
+        // En que los repositorios de consulta y escritura sean diferentes se podria inyectar la cadena de conexion
+        // diferenet para cada implementacion de repositorio, util para escenarios donde se tiene base de datos en modo
+        // replicacion o inclusive bases de datos o repositorios en nube como table storage accounts, mongodb etc.
+
         _ = services.AddScoped<IProductRepository, ProductRepository>();
-
-        // Registro del repositior para ordenes
-        _ = services.AddScoped<IOrderRepository, OrderRepository>();
-
         _ = services.AddScoped<IProductQuery, ProductQueryRepository>();
-
+        _ = services.AddScoped<IOrderRepository, OrderRepository>();
         _ = services.AddScoped<IOrderQuery, OrderQueryRepository>();
+
+        // Patron singleton para el administrador de cache
+        _ = services.AddSingleton<ICachingManager, CachingManager>();
 
         return services;
     }
