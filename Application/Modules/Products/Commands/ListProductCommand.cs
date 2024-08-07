@@ -1,6 +1,5 @@
 ﻿using Application.Modules.Products.Models;
 using Application.Modules.Products.Queries;
-using FluentValidation;
 using MediatR;
 
 namespace Application.Modules.Products.Commands

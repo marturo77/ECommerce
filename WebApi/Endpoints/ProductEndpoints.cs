@@ -1,6 +1,7 @@
 using Application.Modules.Products.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+
 public static class ProductEndpoints
 {
     /// <summary>
@@ -41,9 +42,16 @@ public static class ProductEndpoints
     {
         if (id.HasValue)
         {
-            DeleteProductCommand.RequestDelete request = new DeleteProductCommand.RequestDelete(id.Value);
-            var response = await sender.Send(request);
-            return Results.Ok(response);
+            try
+            {
+                DeleteProductCommand.RequestDelete request = new DeleteProductCommand.RequestDelete(id.Value);
+                var response = await sender.Send(request);
+                return Results.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
         }
         else return Results.BadRequest("No se ha incluido un Id");
     }
@@ -58,7 +66,7 @@ public static class ProductEndpoints
     private static async Task<IResult> ListProduct([FromQuery] string? name, ISender sender,
        CancellationToken cancellationToken)
     {
-       ListProductCommand.RequestList request = new ListProductCommand.RequestList(name);
+        ListProductCommand.RequestList request = new ListProductCommand.RequestList(name);
         var response = await sender.Send(request);
         return Results.Ok(response);
     }
