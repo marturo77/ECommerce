@@ -37,24 +37,28 @@ public static class ProductEndpoints
     /// <param name="sender"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<IResult> DeleteProduct(int? id, ISender sender,
-       CancellationToken cancellationToken)
+    [HttpDelete("{id}")]
+    public static async Task<IResult> DeleteProduct(int? id, [FromServices] ISender sender, CancellationToken cancellationToken)
     {
         if (id.HasValue)
         {
             try
             {
-                DeleteProductCommand.RequestDelete request = new DeleteProductCommand.RequestDelete(id.Value);
+                var request = new DeleteProductCommand.RequestDelete(id.Value);
                 var response = await sender.Send(request);
                 return Results.Ok(response);
             }
             catch (Exception ex)
             {
-                return Results.BadRequest(ex.Message);
+                return Results.BadRequest(new { message = ex.Message });
             }
         }
-        else return Results.BadRequest("No se ha incluido un Id");
+        else
+        {
+            return Results.BadRequest(new { message = "No se ha incluido un Id" });
+        }
     }
+
 
     /// <summary>
     ///

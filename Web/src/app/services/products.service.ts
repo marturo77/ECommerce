@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { ErrorHandlerService } from './errorHandlerService';
 
 export interface Product {
   productId: number;
@@ -19,46 +20,25 @@ export interface Product {
 export class ProductsService {
   private apiUrl = `${environment.apiUrl}/products`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private errorHandler: ErrorHandlerService) { }
 
   getProducts(): Observable<Product[]> {
     return this.http.get<{ items: Product[] }>(this.apiUrl).pipe(
-      map(response => response.items),  
-      catchError(this.handleError)
+      map(response => response.items),
+      catchError(this.errorHandler.handleError)
     );
   }
 
   createProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(this.apiUrl, product).pipe(
-      catchError(this.handleError)
+      catchError(this.errorHandler.handleError)
     );
   }
 
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError)
+      catchError(this.errorHandler.handleError)
     );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      if (error.error.errors) {
-        const validationErrors = [];
-        for (const key in error.error.errors) {
-          if (error.error.errors.hasOwnProperty(key)) {
-            validationErrors.push(`${key}: ${error.error.errors[key].join(', ')}`);
-          }
-        }
-        errorMessage = validationErrors.join('\n');
-      } else {
-        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      }
-    }
-    return throwError(errorMessage);
-  }
 }
