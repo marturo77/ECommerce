@@ -1,4 +1,9 @@
-﻿CREATE TABLE OrderItems (
+﻿
+/*
+ Listado de ordenes, se hizo simple con una llave foranea a productos, en un escenario empresarial, donde
+ la tabla de ordenes sea historica seguramente se necesitara un manejo diferente, des-normalizado, indices optimizados etc.
+*/
+CREATE TABLE OrderItems (
     [orderItemId]               INT NOT NULL IDENTITY(1,1),
     [orderId]                   INT NOT NULL,
     [productId]                 INT NOT NULL,

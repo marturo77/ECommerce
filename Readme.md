@@ -51,3 +51,13 @@ Además, se implementaron servicios de Angular para gestionar la comunicación c
 
 ### Funcionalidad de Envío de Notificaciones
 La funcionalidad de envío de notificaciones en tiempo real se implementa utilizando varias tecnologías modernas y técnicas de arquitectura. En el backend, se emplea ASP.NET Core junto con SignalR para la comunicación en tiempo real, y en el frontend de Angular se utiliza ngx-toastr para mostrar notificaciones. La arquitectura se basa en un patrón de publicación-suscripción (Pub-Sub) mediante MediatR para la gestión de eventos. Cuando se crea una nueva orden en el sistema, se publica un evento que es manejado por un NotificationHandler que envía una notificación a todos los clientes conectados a través de SignalR. Las notificaciones se muestran en el frontend utilizando ngx-toastr para mejorar la experiencia del usuario con mensajes emergentes.
+
+### Limitaciones del prototipo para la prueba técnica
+1. No se consideró paginación en los listados de productos ni ordenes.
+2. No se uso el comando put de los endpoints del webapi aunque se dejo declarado para cumplir con FullRest.
+3. Se hicieron recomendaciones para las tablas de la base de datos para escenarios enormes de datos.
+4. Se implementó un cache en memoria para productos a manera de ejemplo, en un escenario real podria habers implementado cache en Redux u otro mecanismo mas eficiente o costo/efectivo.
+5. Los repositorios al ser declarados como interfaces da pie a lugar que se podrian haber implementado versiones de repositorios análogos para bases de datos no relacionales como mongoDB etc.
+6. Con la aquitectura propuesta se hubiera podido dividir el webapi en dos servicios, es viable y factible para integrar una arquitectura de microservicios, pero complicaria la prueba tecnica dado que hay que hacer un manejo de los identificadores etc.
+7. No se hizo esfuerzo mayor para determinar un sistema robusto para el control de excepciones ni tampoco sistemas de seguimiento de instrumentalizacion como Applications Insights/Prometheus etc.
+8. Se implemento un ejemplo de notificaciones usando Notificaciones MediatR muy básico, de hecho la notificación se envia a todos los usarios que tengan conexion signalR. 
