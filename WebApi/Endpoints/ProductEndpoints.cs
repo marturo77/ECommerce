@@ -2,6 +2,10 @@ using Application.Modules.Products.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+///  En general no se trabajo en el manejador de excepciones dado el alcance del tiempo
+///  para desarrollar la prueba tecnica
+/// </summary>
 public static class ProductEndpoints
 {
     /// <summary>
@@ -14,6 +18,7 @@ public static class ProductEndpoints
         group.MapPost("", CreateProduct);
         group.MapGet("", ListProduct);
         group.MapDelete("{id:int?}", DeleteProduct);
+        group.MapPut("", UpdateProduct);
     }
 
     /// <summary>
@@ -24,6 +29,20 @@ public static class ProductEndpoints
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     private static async Task<IResult> CreateProduct([FromBody] CreateProductCommand.RequestCreate request, ISender sender,
+        CancellationToken cancellationToken)
+    {
+        var response = await sender.Send(request);
+        return Results.Ok(response);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="sender"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    private static async Task<IResult> UpdateProduct([FromBody] UpdateProductCommand.RequestUpdate request, ISender sender,
         CancellationToken cancellationToken)
     {
         var response = await sender.Send(request);
@@ -58,7 +77,6 @@ public static class ProductEndpoints
             return Results.BadRequest(new { message = "No se ha incluido un Id" });
         }
     }
-
 
     /// <summary>
     ///
