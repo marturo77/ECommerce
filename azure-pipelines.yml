@@ -1,0 +1,74 @@
+name: $(Build.DefinitionName)_$(date:yyyyMMdd)$(rev:.r)
+
+# trigger:
+#   branches:
+#     include:
+#     - main  # Ajusta a la rama que prefieras
+
+# Ejemplo de pipeline para despliegue de aplicacion de backend, la aplicacion angular deberia desplegarse
+# con otro pipelina
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  buildPlatform: 'Any CPU'
+  projectName: 'WebApi/WebApi.csproj'
+
+# Instalar dotnet 8   
+steps:
+- task: UseDotNet@2
+  displayName: Instalando DotNet 8
+  inputs:
+    packageType: 'sdk'
+    version: '8.x' 
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  displayName: Descargando archivos fuentes
+  inputs:
+    command: 'restore'
+    projects: '**/WebApi.csproj' 
+
+- task: DotNetCoreCLI@2
+  displayName: Compilando Aplicacion
+  inputs:
+    command: 'build'
+    projects: '**/WebApi.csproj'  
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Publicando resultados
+  inputs:
+    command: 'publish'
+    projects: '**/WebApi.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/' 
+    zipAfterPublish: false
+
+- task: ArchiveFiles@2
+  displayName: Generacion de ZIP
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/Web'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(projectName).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: Publicacion de Artefacto
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(projectName).zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+  # Publicacion de la aplicacion en un app service de azure.
+- task: AzureRmWebAppDeployment@4
+  displayName: Despliegue en Azure ECommerce
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'ECommerce-Connection'
+    appType: 'webApp'
+    WebAppName: 'ECommerce'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(projectName).zip'
+    
